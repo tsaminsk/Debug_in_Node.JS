@@ -45,16 +45,17 @@
     файл db.js стр. 20 добавлен module.exports = { sequelize, DataTypes: Sequelize.DataTypes };
 
 3)  TypeError: db.sync is not a function
-    файл app.js исправлено db.sequelize.sync();
+    файл **app.js** исправлено строка 9
+        ```db.sequelize.sync();```
 
 4)  notNull Violation: user.passwordHash cannot be null
-    файл controllers\usercontroller.js стр.12 passwordhash => passwordHash
+    файл **controllers\usercontroller.js** стр.12 passwordhash => passwordHash
 
-5)  файл controllers\gamecontroller.js строка 9
+5)  файл **controllers\gamecontroller.js** строка 9
         было function findSuccess(data)
         стало function findSuccess(games)
 
-6)  файл controllers\gamecontroller.js строка 76
+6)  файл **controllers\gamecontroller.js** строка 76
         было owner_id: req.user
         стало owner_id: req.user.id
 
@@ -62,16 +63,20 @@
 
 ## Рефактор кода
 
-1)  обозначение переменных **var** заменено на более современные **let** & **const**
+3.  обозначение переменных **var** заменено на более современные **let** & **const**
 
-2)  добавлены **;** & **,** в конце строк где это необходимо
+3.  добавлены **;** и **,** в конце строк где это необходимо
 
-3)  добавленна деструктуризация где это возможно, например:
-        было: function deleteFail(err) {
+3.  добавленна деструктуризация где это возможно, например:
+        было:
+            ```javascript
+            function deleteFail(err) {
                 res.status(500).json({
                     error: err.message
                 })
-            }
-        стало: function deleteFail({ message }) {
-            res.status(500).json({ error: message });
-        }
+            }```
+        стало:
+            ```javascript
+            function deleteFail({ message }) {
+                res.status(500).json({ error: message });
+            }```
