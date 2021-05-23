@@ -1,14 +1,15 @@
-var router = Router();
-var bcrypt = require('bcrypt');
-var jwt = require('jsonwebtoken');
-
-var User = require('../db').import('../models/user');
+const router = require('express').Router({ mergeParams: true });
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { sequelize, DataTypes } = require('../db');
+const User = require('../models/user')(sequelize, DataTypes);
 
 router.post('/signup', (req, res) => {
+
     User.create({
         full_name: req.body.user.full_name,
         username: req.body.user.username,
-        passwordhash: bcrypt.hashSync(req.body.user.password, 10),
+        passwordHash: bcrypt.hashSync(req.body.user.password, 10),
         email: req.body.user.email,
     })
         .then(
@@ -20,8 +21,8 @@ router.post('/signup', (req, res) => {
                 })
             },
 
-            function signupFail(err) {
-                res.status(500).send(err.message)
+            function signupFail({ message }) {
+                res.status(500).json({ error: message });
             }
         )
 })
@@ -31,18 +32,18 @@ router.post('/signin', (req, res) => {
         if (user) {
             bcrypt.compare(req.body.user.password, user.passwordHash, function (err, matches) {
                 if (matches) {
-                    var token = jwt.sign({ id: user.id }, 'lets_play_sum_games_man', { expiresIn: 60 * 60 * 24 });
+                    const token = jwt.sign({ id: user.id }, 'lets_play_sum_games_man', { expiresIn: 60 * 60 * 24 });
                     res.json({
                         user: user,
                         message: "Successfully authenticated.",
-                        sessionToken: token
+                        sessionToken: token,
                     });
                 } else {
-                    res.status(502).send({ error: "Passwords do not match." })
+                    res.status(502).send({ error: "Passwords do not match." });
                 }
             });
         } else {
-            res.status(403).send({ error: "User not found." })
+            res.status(403).send({ error: "User not found." });
         }
 
     })
