@@ -1,20 +1,22 @@
-var router = require('express').Router();
+var router = require('express').Router({ mergeParams: true });
 const { sequelize, DataTypes } = require('../db');
 const Game = require('../models/game')(sequelize, DataTypes);
 
 router.get('/all', (req, res) => {
+
     Game.findAll({ where: { owner_id: req.user.id } })
         .then(
-            function findSuccess(data) {
+            function findSuccess(games) {
                 res.status(200).json({
-                    games: games,
+                    games,
                     message: "Data fetched."
                 })
             },
 
             function findFail() {
                 res.status(500).json({
-                    message: "Data not found"
+                    message: "Data not found",
+                    req
                 })
             }
         )
@@ -71,7 +73,7 @@ router.put('/update/:id', (req, res) => {
         {
             where: {
                 id: req.params.id,
-                owner_id: req.user
+                owner_id: req.user.id
             }
         })
         .then(
