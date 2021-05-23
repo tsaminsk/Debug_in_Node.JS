@@ -18,7 +18,7 @@
 4)  TypeError: require(...).import is not a function<br />
     файл **controllers\gamecontroller.js**, строка 2 <br />
         было ```var Game = require('../db').import('../models/game');```<br />
-        стало   ```const { sequelize, DataTypes } = require('../db');```
+        стало   ```const { sequelize, DataTypes } = require('../db');```<br />
                 ```const Game = require('../models/game')(sequelize, DataTypes);```
 
 5)  ReferenceError: routers is not defined<br />
@@ -42,7 +42,7 @@
         было: ```function(sequelize, DataTypes)``` {<br />
         стало: ```module.exports = function (sequelize, DataTypes)```<br />
 
-2)  ошибка экспорта файл **db.js** стр. 20 <br />
+2)  ошибка экспорта файл **db.js** строка 20 <br />
         добавлен ```module.exports = { sequelize, DataTypes: Sequelize.DataTypes };```<br />
 
 3)  TypeError: db.sync is not a function<br />
@@ -50,8 +50,8 @@
         ```db.sequelize.sync();```
 
 4)  notNull Violation: user.passwordHash cannot be null<br />
-    файл **controllers\usercontroller.js** стр.12 <br />
-        passwordhash => passwordHash
+    файл **controllers\usercontroller.js** строка 12 <br />
+        ```passwordhash => passwordHash```
 
 5)  файл **controllers\gamecontroller.js** строка 9<br />
         было ```function findSuccess(data)```<br />
